@@ -150,14 +150,14 @@ def getNote(ind, key, mod):
 
 
 def generateSong(SEED):
-	melody = generateMelody(SEED)
-	comp = generateComposite(generateMelody(SEED), RHYTHM)
-	comp2 = generateComposite(comp, RHYTHM)
-	comp3 = generateComposite(generateMelody(SEED), FASTRHYTHM)
+	melody = generateMelody(SEED, CMinorBasic, 0)
+	comp = generateComposite(generateMelody(SEED, CMinorBasic, 0), RHYTHM)
+	comp2 = generateComposite(comp, FASTRHYTHM)
+	comp3 = generateComposite(generateMelody(SEED, CMinorBasic, 0), FASTRHYTHM)
 	song = appendPhrase(melody, comp2)
-	song = appendPhrase(song, generateMelody(SEED))
+	song = appendPhrase(song, generateMelody(SEED, CMinorBasic, 0))
 	song = appendPhrase(song, comp3)
-	song = appendPhrase(song, generateMelody(SEED))
+	song = appendPhrase(song, generateMelody(SEED, CMinorBasic, 0))
 
 	return song
 
@@ -166,6 +166,7 @@ SEED = "yolo"
 print SEED
 STAC = .5
 KEY = c
+
 def chords(mod):
 	song = []
 	for x in range(4):
@@ -202,17 +203,19 @@ def flattenNote(note):
 	else:
 		return SCALE[x-1]
 
-
+'''
 make_wav(chords(0), 220, transpose=0, fn="Songs/chord1.wav", leg_stac = STAC)
 make_wav(chords(2), 220, transpose=0, fn="Songs/chord2.wav", leg_stac = STAC)
 make_wav(chords(4), 220, transpose=0, fn="Songs/chord3.wav", leg_stac = STAC)
-make_wav(generateSmart(SEED, 0, 16), 220, transpose=0, fn="Songs/melody.wav", leg_stac = STAC)
+'''
+make_wav(generateSong(SEED), 220, transpose=0, fn="Songs/melody.wav", leg_stac = STAC)
 
+'''
 mix_files("Songs/chord1.wav", "Songs/chord2.wav", "Songs/chord12.wav", chann = 1)
 mix_files("Songs/chord12.wav", "Songs/chord3.wav", "Songs/chords.wav", chann = 1)
 mix_files("Songs/chords.wav", "Songs/melody.wav", "Songs/topkek.wav", chann = 1)
 #mix_files("Songs/topkek0.wav", "Songs/topkek3.wav", "Songs/topkek.wav", chann = 1)
-
+'''
 
 #make_wav(generateSmart(SEED, 0, 60), 220, transpose=1, fn="Songs/topkek1.wav", leg_stac = STAC)
 #make_wav(generateSmart(SEED, 2), 220, transpose=1, fn="Songs/topkek2.wav", leg_stac = STAC)

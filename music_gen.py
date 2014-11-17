@@ -52,29 +52,43 @@ bBasic = ['b', 'c#','d', 'e', 'f#', 'g#', 'a#']
 KEYMAP = ['a', 'b', 'c', 'd', 'e', 'g']
 KEYS = [a, b, c, d, e, g]
 
+PROG1 = [0,3,4,0]
+PROG2 = [0,3]
+PROG3 = [0,3,0,4]
+CHORDPROGS = [PROG1,PROG2,PROG3]
+CHOSENPROG = -1
 
+NOTESPACE = 4
 
-NOTESPACE = 9
-
-GOALMEASURES = 17
+GOALMEASURES = 15
 TOTALMEASURES = 0
 MEASURE = 0
 accident = False
+ACCIDENT_NUM = 0
+
+SEED = "CLASS TIME BUTT"
+print SEED
+STAC = .5
+KEY = c
+BASEKEY = cBasic
 
 ################HELPER FUNCTIONS#####################
-
+#Returns a rhythm that sticks to the time signiture
 def getBeat(rhythmSpace):
 	noteLen = random.choice(rhythmSpace)
 	while(not beatCheck(noteLen)):
 		noteLen = random.choice(rhythmSpace)
 	return noteLen
 
+#returns whether or not the given rhythm not will fit signiture
 def beatCheck(beat):
 	if(MEASURE + float(1/float(beat)) > 1.0):
 		return False
 	else:
 		return True
 
+#Returns the note index in the key based on 
+#the mod value 
 def getNote(ind, key, mod):
 	ind = ind + mod
 	if(ind < 0):
@@ -86,6 +100,7 @@ def getNote(ind, key, mod):
 			ind = ind - 1
 	return ind
 
+#Returns the note index 1 halfstep down from given index
 def flattenNote(note):
 	x = SCALE.index(note)
 	if (x == 0):
@@ -93,6 +108,7 @@ def flattenNote(note):
 	else:
 		return SCALE[x-1]
 
+#appends p2 to p1
 def appendPhrase(p1, p2):
 	for x in range (len(p2)):
 		p1.append(p2[x])
@@ -102,13 +118,12 @@ def appendPhrase(p1, p2):
 
 ##############GENERATORS###########################
 
-#Generate basic melody
+#Generate a randombasic melody
 def generateMelody(seed, key, mod):
 	global MEASURE
 	melody = []
 
-	random.seed(seed)
-
+	random.seed(seed) #set seed
 
 	while not(MEASURE == 1.0):
 		noteLen = getBeat(RHYTHM)
@@ -130,23 +145,27 @@ def generateMelody(seed, key, mod):
 
 
 
-
+#adds the next note to the melody based on NOTESPACE variation
+#small chance of adding an accidental
+#if the last note was an accidental then it will be resolved
 def generateSmartNxt(melody, key, beat, mod):
 	global accident
-
-	if(accident):
+	global ACCIDENT_NUM
+	if(accident): #was the last note an accidental?
 		accident = False
 		x = flattenNote(melody[len(melody)-1][0]) 
 
-	elif(random.randrange(0, 20) == 15 and not accident):
+	elif(random.randrange(0, 40) == 15 and not accident and ACCIDENT_NUM < 1):
+		#make an accidental note
 		print "accident"
 		accident = True
+		ACCIDENT_NUM = ACCIDENT_NUM + 1;
 		x = random.choice(SCALE)
 		while x in key:
 			x = random.choice(SCALE)
 		print x
 
-	elif(random.randrange(0, 100) % 2 != 0):
+	elif(random.randrange(0, 100) % 2 != 0): #add random note in NOTESPACE range
 		x = key[getNote(key.index(melody[len(melody)-1][0]) + random.randrange(1, NOTESPACE), key, mod)]
 		
 	else:
@@ -182,6 +201,11 @@ def generateChords(seed, key, mod):
 	global TOTALMEASURES
 	global MEASURE
 	global GOALMEASURES
+	global CHOSENPROG
+
+	if(CHOSENPROG == -1):
+		
+	
 	random.seed(seed)
 	song = []
 	TOTALMEASURES = 0
@@ -222,11 +246,7 @@ def generateChords(seed, key, mod):
 
 #TODO - Make generateChords use different progressions
 
-SEED = "fun"
-print SEED
-STAC = .5
-KEY = c
-BASEKEY = cBasic
+
 
 
 make_wav(generateSong(SEED, KEY, BASEKEY, 0), 220, transpose=0, fn="GenSongs/test.wav", leg_stac = STAC)
