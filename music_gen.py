@@ -49,8 +49,8 @@ b = ['b3', 'c#3','d3', 'e3', 'f#3', 'g#3', 'a#3',
 	'b5', 'c#5','d5', 'e5', 'f#5', 'g#5', 'a#5']
 bBasic = ['b', 'c#','d', 'e', 'f#', 'g#', 'a#']
 
-KEYMAP = ['a', 'b', 'c', 'd', 'e', 'f', 'g']
-KEYS = [a, b, c, d, e, f, g]
+KEYMAP = ['a', 'b', 'c', 'd', 'e', 'g']
+KEYS = [a, b, c, d, e, g]
 
 
 
@@ -188,23 +188,31 @@ def generateChords(seed, key, mod):
 
 	while TOTALMEASURES < GOALMEASURES + 1:
 		n = g[getNote(0, g, mod)]
+		'''
 		if (mod == 2):
 			n = flattenNote(n)
+			'''
 		song.append((n, 4))
 
-		n = d[getNote(0, d, mod)]
-		if (mod == 2):
-			n = flattenNote(n)
-		song.append((n ,4))
-
-		n = a[getNote(0, a, mod)]
-		if (mod == 2):
-			n = flattenNote(n)
-		song.append((n ,4))
-
 		n = c[getNote(0, c, mod)]
+		'''
 		if (mod == 2):
 			n = flattenNote(n)
+			'''
+		song.append((n ,4))
+
+		n = g[getNote(0, g, mod)]
+		'''
+		if (mod == 2):
+			n = flattenNote(n)
+			'''
+		song.append((n ,4))
+
+		n = d[getNote(0, d, mod)]
+		'''
+		if (mod == 2):
+			n = flattenNote(n)
+			'''
 		song.append((n,4))
 
 		TOTALMEASURES = TOTALMEASURES + 1
@@ -214,7 +222,7 @@ def generateChords(seed, key, mod):
 
 #TODO - Make generateChords use different progressions
 
-SEED = "pot"
+SEED = "fun"
 print SEED
 STAC = .5
 KEY = c
